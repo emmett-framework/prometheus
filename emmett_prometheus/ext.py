@@ -89,9 +89,9 @@ class Prometheus(Extension):
             return
         if f == self._metrics_route:
             return
-        if isinstance(route, HTTPRoutingRule):
+        if self.config.enable_http_metrics and isinstance(route, HTTPRoutingRule):
             route.pipeline.insert(0, self._pipe_http)
-        if isinstance(route, WebsocketRoutingRule):
+        if self.config.enable_ws_metrics and isinstance(route, WebsocketRoutingRule):
             route.pipeline.insert(0, self._pipe_ws)
 
     async def _metrics_route(self):

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "emmett-prometheus"
-version = "0.1.0"
+version = "0.1.1"
 description = "Prometheus extension for Emmett framework"
 authors = ["Giovanni Barillari <g@baro.dev>"]
 license = "BSD-3-Clause"
