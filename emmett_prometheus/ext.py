@@ -77,7 +77,7 @@ class Prometheus(Extension):
             self.app.route(
                 self.config.metrics_route_path,
                 methods='get',
-                hostname=self.config.metrics_rotue_hostname,
+                hostname=self.config.metrics_route_hostname,
                 output='bytes'
             )(self._metrics_route)
 
