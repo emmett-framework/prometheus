@@ -85,14 +85,21 @@ class Prometheus(Extension):
     def _inject_pipes(self, route, f):
         if not self.config.auto_load:
             return
-        if route.name in self._excluded_routes:
-            return
         if f == self._metrics_route:
+            return
+        if self._get_route_name(route, f) in self._excluded_routes:
             return
         if self.config.enable_http_metrics and isinstance(route, HTTPRoutingRule):
             route.pipeline.insert(0, self._pipe_http)
         if self.config.enable_ws_metrics and isinstance(route, WebsocketRoutingRule):
             route.pipeline.insert(0, self._pipe_ws)
+
+    @staticmethod
+    def _get_route_name(route, f):
+        rv = route.name or route.build_name(f)
+        if rv.endswith("."):
+            rv = rv + f.__name__
+        return rv
 
     async def _metrics_route(self):
         response.content_type = prometheus_client.exposition.CONTENT_TYPE_LATEST
@@ -121,18 +128,24 @@ class PrometheusHTTPPipe(Pipe):
             status=response.status
         ).inc()
         if (
-            request.method not in self.ext._httph_filter_methods and
-            response.status in self.ext._httph_only_status
+            self.ext._httph_filter_methods and
+            request.method in self.ext._httph_filter_methods
         ):
-            self._http_histogram.labels(
-                route=request.name,
-                method=request.method,
-                status=response.status
-            ).observe(
-                (
-                    time.perf_counter_ns() - request._prometheus_http_histogram_ts
-                ) / 1_000_000
-            )
+            return
+        if (
+            self.ext._httph_only_status and
+            request.method not in self.ext._httph_only_status
+        ):
+            return
+        self._http_histogram.labels(
+            route=request.name,
+            method=request.method,
+            status=response.status
+        ).observe(
+            (
+                time.perf_counter_ns() - request._prometheus_http_histogram_ts
+            ) / 1_000_000
+        )
 
 
 class PrometheusWSPipe(Pipe):
