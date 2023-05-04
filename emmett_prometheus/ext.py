@@ -74,8 +74,10 @@ class Prometheus(Extension):
             self._pipe_ws = PrometheusWSPipe(self)
 
         if self.config.auto_load:
-            self.app.route(
+            self.appmod = self.app.module(__name__, "emmett_prometheus")
+            self.appmod.route(
                 self.config.metrics_route_path,
+                name="metrics",
                 methods='get',
                 hostname=self.config.metrics_route_hostname,
                 output='bytes'
