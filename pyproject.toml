@@ -1,13 +1,18 @@
-[tool.poetry]
-name = "emmett-prometheus"
-version = "0.1.5"
-description = "Prometheus extension for Emmett framework"
-authors = ["Giovanni Barillari <g@baro.dev>"]
-license = "BSD-3-Clause"
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
+[project]
+name = "emmett-prometheus"
+version = "0.2.0"
+description = "Prometheus extension for Emmett framework"
 readme = "README.md"
-homepage = "https://github.com/emmett-framework/prometheus"
-repository = "https://github.com/emmett-framework/prometheus"
+license = "BSD-3-Clause"
+requires-python = ">=3.8"
+
+authors = [
+    { name = "Giovanni Barillari", email = "g@baro.dev" }
+]
 
 keywords = ["prometheus", "monitoring", "emmett"]
 classifiers = [
@@ -27,20 +32,58 @@ classifiers = [
     "Topic :: System :: Monitoring"
 ]
 
-include = [
-    "LICENSE"
+dependencies = [
+    "emmett-core~=1.0",
+    "prometheus-client~=0.21",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.8"
-emmett = "^2.5.0"
-prometheus-client = "^0.16.0"
+[project.urls]
+Homepage = 'https://github.com/emmett-framework/prometheus'
+Funding = 'https://github.com/sponsors/gi0baro'
+Source = 'https://github.com/emmett-framework/prometheus'
+Issues = 'https://github.com/emmett-framework/prometheus/issues'
 
-[tool.poetry.dev-dependencies]
+[tool.hatch.build.targets.sdist]
+include = [
+    '/README.md',
+    '/LICENSE',
+    '/emmett_prometheus',
+]
 
-[tool.poetry.urls]
-"Issue Tracker" = "https://github.com/emmett-framework/prometheus/issues"
+[tool.ruff]
+line-length = 120
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.ruff.format]
+quote-style = 'double'
+
+[tool.ruff.lint]
+extend-select = [
+    # E and F are enabled by default
+    'B',      # flake8-bugbear
+    'C4',     # flake8-comprehensions
+    'C90',    # mccabe
+    'I',      # isort
+    'N',      # pep8-naming
+    'Q',      # flake8-quotes
+    'RUF100', # ruff (unused noqa)
+    'S',      # flake8-bandit
+    'W',      # pycodestyle
+]
+extend-ignore = [
+    # 'S101', # assert is fine
+]
+mccabe = { max-complexity = 44 }
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+lines-after-imports = 2
+known-first-party = ['emmett_prometheus']
+
+[tool.ruff.lint.per-file-ignores]
+'emmett_prometheus/__init__.py' = ['F401']
+'emmett_prometheus/_imports.py' = ['F401']
+
+[tool.uv]
+dev-dependencies = [
+    "ruff~=0.5.0",
+]
