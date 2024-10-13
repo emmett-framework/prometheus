@@ -69,9 +69,7 @@ extend-select = [
     'S',      # flake8-bandit
     'W',      # pycodestyle
 ]
-extend-ignore = [
-    # 'S101', # assert is fine
-]
+extend-ignore = []
 mccabe = { max-complexity = 44 }
 
 [tool.ruff.lint.isort]

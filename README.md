@@ -2,7 +2,7 @@
 
 Emmett-Prometheus is an [Emmett framework](https://emmett.sh) extension integrating [prometheus](https://prometheus.io) client.
 
-[![pip version](https://img.shields.io/pypi/v/emmett-prometheus.svg?style=flat)](https://pypi.python.org/pypi/emmett-prometheus) 
+Emmett-Prometheus is compatible both with Emmett and Emmett55.
 
 ## Installation
 
