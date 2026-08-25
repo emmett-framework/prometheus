@@ -119,7 +119,7 @@ class PrometheusHTTPPipe(Pipe):
         self._http_counter.labels(route=request.name, method=request.method, status=response.status).inc()
         if self.ext._httph_filter_methods and request.method in self.ext._httph_filter_methods:
             return
-        if self.ext._httph_only_status and request.method not in self.ext._httph_only_status:
+        if self.ext._httph_only_status and response.status not in self.ext._httph_only_status:
             return
         self._http_histogram.labels(route=request.name, method=request.method, status=response.status).observe(
             (time.perf_counter_ns() - request._prometheus_http_histogram_ts) / 1_000_000
